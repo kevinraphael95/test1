@@ -90,12 +90,14 @@ function selectPairs(births){
     if (usedTitles.has(page.title)) continue;
     usedTitles.add(page.title);
     const clue = maskName(page.extract.split('. ').slice(0, 2).join('. '), page.title);
+    const revealSentence = page.extract.split('. ').slice(0, 2).join('. ').replace(/\.$/, '');
     chosen.push({
       id: page.title + '-' + Date.now() + '-' + chosen.length,
       title: page.title,
       year: b.year,
       thumb: page.thumbnail.source,
       clue,
+      reveal: `${page.title} — ${revealSentence}.`,
     });
   }
   return chosen;
@@ -138,7 +140,7 @@ function render(){
 
     const reveal = document.createElement('div');
     reveal.className = 'portrait-reveal';
-    reveal.textContent = `${item.title}${item.year != null ? ' · ' + formatYear(item.year) : ''}`;
+    reveal.textContent = item.reveal;
 
     card.appendChild(thumb);
     card.appendChild(reveal);
