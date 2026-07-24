@@ -162,8 +162,12 @@ button:disabled{ opacity:0.45; cursor:default; }
 .btn-primary:hover:not(:disabled){ background:var(--primary-dark); border-color:var(--primary-dark); box-shadow:var(--shadow-2); }
 
 /* ---- Board ---- */
-.board-wrap{ display:flex; flex-direction:column; gap:28px; }
-.board-section + .board-section{ margin-top:0; }
+.board{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:clamp(14px, 3vw, 24px);
+  align-items:start;
+}
 .portraits-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -352,6 +356,10 @@ footer{
 }
 footer a{ color:var(--primary); text-decoration:none; }
 footer a:hover{ text-decoration:underline; }
+
+@media (max-width:640px){
+  .board{ grid-template-columns:1fr; gap:24px; }
+}
 
 @media (max-width:560px){
   body{ padding:24px 10px 48px; }
