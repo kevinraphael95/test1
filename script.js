@@ -3,8 +3,7 @@
 // ---------------------------------------------------------------
 // Aucune liste interne : les personnalités viennent en direct de
 // l'API "Éphéméride" (onthisday/births) de Wikipédia, pour une
-// date aléatoire. Le nom de chaque personnalité est masqué dans
-// son propre extrait pour ne pas trahir la réponse.
+// date aléatoire.
 // ---------------------------------------------------------------
 const DAYS_IN_MONTH = [31,28,31,30,31,30,31,31,30,31,30,31];
 const PAIR_COUNT = 5;
@@ -60,24 +59,6 @@ async function fetchBirths(){
   return data.births || [];
 }
 
-// Retire toute occurrence du nom (et de ses mots pris isolément s'ils font
-// plus de 3 lettres) de l'extrait, pour ne pas trahir la réponse.
-function maskName(extract, fullName){
-  if (!extract || !fullName) return extract || '';
-  let masked = extract;
-  const escape = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  masked = masked.replace(new RegExp(escape(fullName), 'gi'), 'Cette personnalité');
-  fullName.split(/\s+/).forEach(part => {
-    if (part.length > 3){
-      masked = masked.replace(new RegExp(`\\b${escape(part)}\\b`, 'gi'), 'Cette personnalité');
-    }
-  });
-  masked = masked.replace(/(Cette personnalité[,\s]*){2,}/gi, 'Cette personnalité ');
-  masked = masked.replace(/\s{2,}/g, ' ').trim();
-  if (!/^Cette personnalité/i.test(masked)) masked = 'Cette personnalité ' + masked.charAt(0).toLowerCase() + masked.slice(1);
-  return masked;
-}
-
 function selectPairs(births){
   const usable = shuffle(births).filter(b =>
     b.pages && b.pages[0] && b.pages[0].thumbnail && b.pages[0].extract && b.pages[0].extract.length > 50
@@ -89,15 +70,13 @@ function selectPairs(births){
     const page = b.pages[0];
     if (usedTitles.has(page.title)) continue;
     usedTitles.add(page.title);
-    const clue = maskName(page.extract.split('. ').slice(0, 2).join('. '), page.title);
-    const revealSentence = page.extract.split('. ').slice(0, 2).join('. ').replace(/\.$/, '');
+    const sentence = page.extract.split('. ').slice(0, 2).join('. ').replace(/\.$/, '');
     chosen.push({
       id: page.title + '-' + Date.now() + '-' + chosen.length,
       title: page.title,
       year: b.year,
       thumb: page.thumbnail.source,
-      clue,
-      reveal: `${revealSentence}.`,
+      clue: `${page.title} — ${sentence}.`,
     });
   }
   return chosen;
@@ -138,12 +117,7 @@ function render(){
     img.alt = '';
     thumb.appendChild(img);
 
-    const reveal = document.createElement('div');
-    reveal.className = 'portrait-reveal';
-    reveal.textContent = item.reveal;
-
     card.appendChild(thumb);
-    card.appendChild(reveal);
     card.addEventListener('click', () => onPick('left', item.id, card));
     leftColEl.appendChild(card);
   });
