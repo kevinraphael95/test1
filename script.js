@@ -250,7 +250,7 @@ async function newGame(){
   render();
 
   loadingEl.style.display = 'none';
-  boardWrapEl.style.display = 'flex';
+  boardWrapEl.style.display = 'grid';
   newGameBtn.disabled = false;
   statusEl.textContent = `0 / ${pairs.length} associations trouvées`;
 }
