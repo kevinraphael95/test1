@@ -97,7 +97,7 @@ function selectPairs(births){
       year: b.year,
       thumb: page.thumbnail.source,
       clue,
-      reveal: `${page.title} — ${revealSentence}.`,
+      reveal: `${revealSentence}.`,
     });
   }
   return chosen;
@@ -250,7 +250,7 @@ async function newGame(){
   render();
 
   loadingEl.style.display = 'none';
-  boardWrapEl.style.display = 'grid';
+  boardWrapEl.style.display = 'flex';
   newGameBtn.disabled = false;
   statusEl.textContent = `0 / ${pairs.length} associations trouvées`;
 }
