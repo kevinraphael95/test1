@@ -162,11 +162,14 @@ button:disabled{ opacity:0.45; cursor:default; }
 .btn-primary:hover:not(:disabled){ background:var(--primary-dark); border-color:var(--primary-dark); box-shadow:var(--shadow-2); }
 
 /* ---- Board ---- */
-.board{
+.board-wrap{ display:flex; flex-direction:column; gap:28px; }
+.board-section + .board-section{ margin-top:0; }
+.portraits-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:0 20px;
+  gap:clamp(10px, 2.4vw, 16px);
 }
+.clues-list{ display:flex; flex-direction:column; }
 .col-label{
   font-family:'Roboto Mono', monospace;
   font-size:11px;
@@ -192,6 +195,7 @@ button:disabled{ opacity:0.45; cursor:default; }
   gap:10px;
   box-shadow:var(--shadow-1);
 }
+.portraits-grid .portrait-card{ margin-bottom:0; }
 .clue-card{
   position:relative;
   background:var(--card-bg);
@@ -351,7 +355,7 @@ footer a:hover{ text-decoration:underline; }
 
 @media (max-width:560px){
   body{ padding:24px 10px 48px; }
-  .board{ gap:0 10px; }
+  .portraits-grid{ gap:10px; }
   .clue-text{ -webkit-line-clamp:5; }
   h1{ margin-bottom:6px; }
   .subtitle{ font-size:13px; margin-bottom:22px; }
